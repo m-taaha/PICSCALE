@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 
 export const UploadForm = () => {
     const [selectFile, setSelectFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState("");
+    const [preview, setPreview] = useState<string | null>(null);
     const [targetSize, setTargetSize] = useState("thumbnail");
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -28,6 +28,14 @@ export const UploadForm = () => {
         }
     }
 
+    const handleReset = () => {
+        if(preview) {
+            URL.revokeObjectURL(preview);
+        }
+        setSelectFile(null);
+        setPreview(null);
+    }
+
 
   return (
     <main className="bg-[#FFFDF0] text-zinc-800 max-w-md border-zinc-200 rounded-xl p-6 shadow-sm">
@@ -47,12 +55,23 @@ export const UploadForm = () => {
           </select>
         </div>
 
-        <button
-          onClick={handleButtonClick}
-          className="w-full py-2 bg-zinc-900 text-[#FFFDF0] rounded-md text-sm font-medium hover:bg-zinc-800 transition-all"
-        >
-          Select Image
-        </button>
+{/* CTA */}
+        <div className="flex flex-col gap-2">
+          {/* select button */}
+          <button
+            onClick={handleButtonClick}
+            className="w-full py-2 bg-zinc-900 text-[#FFFDF0] rounded-md text-sm font-medium hover:bg-zinc-800 transition-all"
+          >
+            Select Image
+          </button>
+
+          {/* reset button  */}
+          <button 
+          onClick={handleReset}
+          className="w-full py-2 bg-zinc-900 text-[#FFFDF0] rounded-md text-sm font-medium hover:bg-zinc-800 transition-all">
+            Reset Button
+          </button>
+        </div>
 
         <div>
           <input
@@ -65,13 +84,13 @@ export const UploadForm = () => {
         </div>
 
         <div>
-          {preview && 
+          {preview && (
             <img
               src={preview}
               alt="image"
               className="mt-4 rounded-lg w-full border border-zinc-200 shadow-inner"
             />
-          }
+          )}
         </div>
       </section>
     </main>
